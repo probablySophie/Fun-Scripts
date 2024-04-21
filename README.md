@@ -22,4 +22,6 @@ Scripts that do things!
 > * Installs [Portainer](https://www.portainer.io/)
 > * Creates a systemd service to auto-run Portainer
 > * Enables that service
+> * Creates an alias where the docker socket should be that points to the portainer socket
+> ![300](https://media1.tenor.com/m/eqLNYv0A9TQAAAAC/swap-indiana-jones.gif)
 </details>

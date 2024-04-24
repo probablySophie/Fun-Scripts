@@ -1,5 +1,14 @@
 clear; printf "Running!\n"
 
+
+## Check if we're sudo
+if [ "$USER" == "root" ]; then # sudo
+	echo "> We're in sudo mode! (good to continue)"; 
+else # sudon't
+	printf "> Not all systems require docker to be run with sudo (OpenSUSE does), but this script rathers you would, just to be sure :)";
+	return;
+fi
+
 printf "> Cloning repo\n"
 git clone --quiet -b pull-model-weights-during-build https://github.com/nwautomator/rembg-webapp-tutorial
 

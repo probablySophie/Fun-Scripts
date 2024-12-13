@@ -3,6 +3,17 @@
 Scripts that do things!
 
 <details>
+<summary>run_hugo</summary>
+
+> &nbsp;
+> When placed inside a Hugo project & run this script:
+> * Sets up a TMUX environment (two windows, one named "Hugo")
+> * Runs [this dockerfile](https://github.com/probablySophie/dockerfiles/blob/main/alpine_hugo.dockerfile) (must be named `alpine/hugo`)
+> * Waits 2 seconds, and then runs Hugo with drafts enabled!
+
+</details>
+
+<details>
 <summary>remove_background.sh</summary>  
 
 > &nbsp;  

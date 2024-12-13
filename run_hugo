@@ -1,0 +1,48 @@
+#!/bin/bash
+
+FOLDER_NAME="${0%/*}"
+CALLED_FILE_PATH="$(readlink -e $0)"
+DIR_NAME="${CALLED_FILE_PATH%/*}"
+IP_ADDRESS="0.0.0.0"
+DELAY=2
+
+function run_drafts
+{
+	sleep $DELAY
+	notify-send "Running with Drafts" -a "Hugo" --icon="/usr/share/icons/breeze-dark/status/64/dialog-positive.svg"
+	tmux send-keys -t $1 "hugo server -D --bind $IP --disableFastRender" ENTER
+}
+function setup_window
+{
+	tmux rename-window "Hugo"
+	run_drafts ":Hugo.0" &	
+}
+
+function cd_if_needed
+{
+	if [[ "${PWD##*/}" != "${FOLDER_NAME}" ]]; then
+		tmux send-keys "cd ${DIR_NAME}" Enter
+	fi
+}
+
+# Are we in tmux?
+if [[ -n "$TMUX" ]]; then
+	printf "Already in a tmux session, just running\n"
+
+	cd_if_needed
+	setup_window
+	
+	tmux send-keys "docker run --rm -u \`id -u\`:\`id -g\` --name hugo_dev --mount src=\"$DIR_NAME\",target=/server,type=bind -p 1313:1313 -it alpine/hugo" Enter
+else
+	printf "Not in tmux.  Starting a session\n"
+	tmux new -d
+
+	setup_window
+	cd_if_needed
+	tmux send-keys "docker run --rm -u \`id -u\`:\`id -g\` --name hugo_dev --mount src=\"$DIR_NAME\",target=/server,type=bind -p 1313:1313 -it alpine/hugo" Enter
+
+	tmux new-window
+	cd_if_needed
+	tmux send-keys "tmux rename-window \"\${PWD##*/}\"" ENTER
+	tmux a
+fi
